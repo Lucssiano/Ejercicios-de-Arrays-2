@@ -15,16 +15,12 @@ c) Mes o meses en los que se abonó por todos los vehículos. */
 
 using namespace std;
 
-struct Autos
-{
-  int mes[12];
-  string patente;
-  float importe;
-};
-
-void pagos(Autos autos[], int cantV);
-void mostrarAutos(Autos autos[], int cantV);
-void inicializarMeses(Autos autos[], int cantV);
+void pagos(int imp[][12], int cantV, int pats[]);
+void inicializarImportes(int imp[][12], int cantV);
+void puntoA(int imp[][12], int cantV, int pats[]);
+void puntoB(int imp[][12], int cantV, int pats[]);
+void puntoC(int imp[][12], int cantV);
+int secuencial(int v[], unsigned t, int bus);
 
 int main()
 {
@@ -36,68 +32,109 @@ int main()
     cin >> cantidadV;
   } while (cantidadV <= 0);
 
-  Autos vecAutos[cantidadV];
+  int patentes[cantidadV], importes[cantidadV][12];
 
   for (int i = 0; i < cantidadV; i++)
   {
     cout << "Ingrese la patente del vehiculo " << i + 1 << ": ";
-    cin >> vecAutos[i].patente;
+    cin >> patentes[i];
   }
 
-  inicializarMeses(vecAutos, cantidadV);
+  inicializarImportes(importes, cantidadV);
 
-  pagos(vecAutos, cantidadV);
+  pagos(importes, cantidadV, patentes);
 
-  mostrarAutos(vecAutos, cantidadV);
+  puntoA(importes, cantidadV, patentes);
+
+  puntoB(importes, cantidadV, patentes);
+
+  puntoC(importes, cantidadV);
 
   return 0;
 }
 
-void inicializarMeses(Autos autos[], int cantV)
+void inicializarImportes(int imp[][12], int cantV)
 {
   for (int i = 0; i < cantV; i++)
     for (int j = 0; j < 12; j++)
-      autos[i].mes[j] = false;
+      imp[i][j] = 0;
 }
 
-void pagos(Autos autos[], int cantV)
+void pagos(int imp[][12], int cantV, int pats[])
 {
   for (int i = 0; i < cantV; i++)
   {
-    int mes, cantMesesIngresados = 0;
+    int mes, pat;
 
-    cout << "Ingrese el mes a abonar (distinto a cero y de 1 a 12): ";
+    cout << "Ingrese la patente a abonar: ";
+    cin >> pat;
+
+    int posPat = secuencial(pats, cantV, pat);
+
+    while (posPat == -1)
+    {
+      cout << "Ingrese la patente a abonar: ";
+      cin >> pat;
+      posPat = secuencial(pats, cantV, pat);
+      if (posPat == -1)
+        cout << "No se encontro esa patente, debe ingresar otra " << endl;
+    }
+
+    cout << "Ingrese el mes a abonar (distinto a cero y de 1 a 12) de la patente " << pat << ": ";
     cin >> mes;
 
-    while (mes != 0 && mes >= 1 && mes <= 12 && cantMesesIngresados <= 12)
+    while (mes != 0)
     {
-      cout << "Ingrese el importe abonado: ";
-      cin >> autos[i].importe;
+      if (mes >= 1 && mes <= 12)
+      {
+        cout << "Ingrese el importe abonado del mes " << mes << ": ";
+        cin >> imp[posPat][mes - 1];
+      }
 
-      cantMesesIngresados++;
-
-      autos[i].mes[mes - 1] = true;
-
-      cout << "Ingrese el mes a abonar (distinto a cero y de 1 a 12): ";
+      cout << "Ingrese otro mes a abonar (distinto a cero y de 1 a 12) de la patente " << pat << ": ";
       cin >> mes;
     }
-
-    cout << "Ingrese la patente de su vehiculo: ";
-    cin >> autos[i].patente; // Verificar que exista
   }
 }
 
-void mostrarAutos(Autos autos[], int cantV)
+// Por cada vehículo, patente e importe total abonado.
+void puntoA(int imp[][12], int cantV, int pats[])
 {
   for (int i = 0; i < cantV; i++)
   {
-    cout << "Patente " << i + 1 << " : " << autos[i].patente << endl;
-    cout << "Mes: " << i + 1 << " : " << endl;
-    // Guardar los meses que se ingresan
+    int impTotal = 0;
     for (int j = 0; j < 12; j++)
-    {
-      cout << autos[i].mes[j] << endl;
-      cout << "Importe abonado " << j + 1 << " : " << autos[i].importe << endl; // mal
-    }
+      impTotal += imp[i][j];
+    cout << "Patente: " << pats[i] << " Importe total abonado: $" << impTotal << endl;
   }
+}
+
+// Por cada vehículo, patente y meses adeudados.
+void puntoB(int imp[][12], int cantV, int pats[])
+{
+  for (int i = 0; i < cantV; i++)
+  {
+    cout << "Vehiculo " << i + 1 << " Patente: " << pats[i] << " - Meses adeudados ";
+    for (int j = 0; j < 12; j++)
+      if (imp[i][j] == 0)
+        cout << j + 1 << " ";
+    cout << endl;
+  }
+}
+
+// Mes o meses en los que se abonó por todos los vehículos.
+void puntoC(int imp[][12], int cantV)
+{
+  cout << "Mes o meses en los que se abono por todos los vehiculos: ";
+}
+
+int secuencial(int v[], unsigned t, int bus)
+{
+  unsigned i = 0;
+  while (i < t && v[i] != bus)
+    i++;
+  if (i == t)
+    return -1;
+  else
+    return i;
 }
