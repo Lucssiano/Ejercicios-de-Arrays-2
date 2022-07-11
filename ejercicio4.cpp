@@ -16,3 +16,134 @@ c. la o las filas con mayor cantidad de espectadores.  */
 #include <iostream>
 
 using namespace std;
+
+const int filas = 12, butacas = 9;
+
+void inicializarMatriz(char mat[][butacas], int cf, int cc);
+void cargaDeDatos(char mat[][butacas], int cf, int cc);
+int nroButacasMuestra(int n);
+int nroButacasReserva(int n);
+
+int main()
+{
+  char cine[filas][butacas];
+
+  inicializarMatriz(cine, filas, butacas);
+  cargaDeDatos(cine, filas, butacas);
+
+  return 0;
+}
+
+void inicializarMatriz(char mat[][butacas], int cf, int cc)
+{
+  for (int i = 0; i < cf; i++)
+    for (int j = 0; j < cc; j++)
+      mat[i][j] = 'D';
+}
+
+void cargaDeDatos(char mat[][butacas], int cf, int cc)
+{
+  for (int k = 0; k < cc; k++)
+    cout << nroButacasMuestra(k) << " ";
+  cout << endl;
+  for (int i = 0; i < cf; i++)
+  {
+    for (int j = 0; j < cc; j++)
+      cout << mat[i][j] << " ";
+    cout << endl;
+  }
+
+  int fUsuario, bUsuario;
+  cout << "¿Que fila y numero de butaca quiere reservar?" << endl;
+  cout << "Fila: ";
+  cin >> fUsuario;
+  cout << "Butaca: ";
+  cin >> bUsuario;
+
+  while (mat[fUsuario - 1][nroButacasReserva(bUsuario)] == 'R')
+  {
+    cout << "Debe ingresar una fila y una butaca que no este reservada" << endl;
+    cout << "Fila: ";
+    cin >> fUsuario;
+    cout << "Butaca: ";
+    cin >> bUsuario;
+  }
+
+  if (fUsuario >= 0)
+  {
+    mat[fUsuario - 1][nroButacasReserva(bUsuario)] = 'R';
+    cargaDeDatos(mat, cf, cc);
+  }
+}
+
+int nroButacasMuestra(int n)
+{
+  int butaca;
+  switch (n)
+  {
+  case 0:
+    butaca = 8;
+    break;
+  case 1:
+    butaca = 6;
+    break;
+  case 2:
+    butaca = 4;
+    break;
+  case 3:
+    butaca = 2;
+    break;
+  case 4:
+    butaca = 1;
+    break;
+  case 5:
+    butaca = 3;
+    break;
+  case 6:
+    butaca = 5;
+    break;
+  case 7:
+    butaca = 7;
+    break;
+  case 8:
+    butaca = 9;
+    break;
+  }
+  return butaca;
+}
+
+int nroButacasReserva(int n)
+{
+  int butaca;
+  switch (n)
+  {
+  case 8:
+    butaca = 0;
+    break;
+  case 6:
+    butaca = 1;
+    break;
+  case 4:
+    butaca = 2;
+    break;
+  case 2:
+    butaca = 3;
+    break;
+  case 1:
+    butaca = 4;
+    break;
+  case 3:
+    butaca = 5;
+    break;
+  case 5:
+    butaca = 6;
+    break;
+  case 7:
+    butaca = 7;
+    break;
+  case 9:
+    butaca = 8;
+    break;
+  }
+  return butaca;
+}

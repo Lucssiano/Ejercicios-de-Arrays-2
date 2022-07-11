@@ -125,7 +125,17 @@ void puntoB(int imp[][12], int cantV, int pats[])
 // Mes o meses en los que se abonó por todos los vehículos.
 void puntoC(int imp[][12], int cantV)
 {
-  cout << "Mes o meses en los que se abono por todos los vehiculos: ";
+  cout << "Mes o meses en los que se abono por todos los vehiculos: " << endl;
+  for (int i = 0; i < 12; i++)
+  {
+    int j = 0;
+    for (j; j < cantV; j++)
+      if (imp[j][i] == 0)
+        j = cantV;
+
+    if (j == cantV)
+      cout << i + 1 << endl;
+  }
 }
 
 int secuencial(int v[], unsigned t, int bus)

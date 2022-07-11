@@ -18,3 +18,10 @@ pasajes no vendidos. */
 #include <iostream>
 
 using namespace std;
+
+int main()
+{
+  const int cantVuelos = 5;
+
+  return 0;
+}
