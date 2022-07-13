@@ -24,3 +24,20 @@ Total general de unidades vendidas 9999999 */
 #include <iostream>
 
 using namespace std;
+
+struct Ropa
+{
+  int cod, talle, precio;
+};
+
+struct Ventas
+{
+  int cod, talle, unidadesVendidas;
+};
+
+void ingresoDatos(Ropa v[]);
+
+int main()
+{
+  ingresoDatos()
+}
