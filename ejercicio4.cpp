@@ -91,11 +91,9 @@ void puntoA(char mat[][butacas])
     for (int j = 0; j < butacas; j++)
       if (mat[i][j] == 'D')
         cantDisp++;
-      else if (mat[i][j] == 'R')
-        cantR++;
 
   cout << "La cantidad de asientos disponibles es: " << cantDisp << endl;
-  cout << "La cantidad de asientos reservados es: " << cantR << endl;
+  cout << "La cantidad de asientos reservados es: " << (filas * butacas) - cantDisp << endl;
 }
 
 void puntoB(char mat[][butacas])
