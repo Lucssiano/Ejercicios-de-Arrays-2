@@ -19,42 +19,49 @@ using namespace std;
 
 const int filas = 12, butacas = 9;
 
-void inicializarMatriz(char mat[][butacas], int cf, int cc);
-void cargaDeDatos(char mat[][butacas], int cf, int cc);
+void inicializarMatriz(char mat[][butacas]);
+void inicializarV(int v[]);
+void cargaDeDatos(char mat[][butacas]);
 int nroButacasMuestra(int n);
 int nroButacasReserva(int n);
+void puntoA(char mat[][butacas]);
+void puntoB(char mat[][butacas]);
+void puntoC(char mat[][butacas]);
 
 int main()
 {
   char cine[filas][butacas];
 
-  inicializarMatriz(cine, filas, butacas);
-  cargaDeDatos(cine, filas, butacas);
+  inicializarMatriz(cine);
+  cargaDeDatos(cine);
+  puntoA(cine);
+  puntoB(cine);
+  puntoC(cine);
 
   return 0;
 }
 
-void inicializarMatriz(char mat[][butacas], int cf, int cc)
+void inicializarMatriz(char mat[][butacas])
 {
-  for (int i = 0; i < cf; i++)
-    for (int j = 0; j < cc; j++)
+  for (int i = 0; i < filas; i++)
+    for (int j = 0; j < butacas; j++)
       mat[i][j] = 'D';
 }
 
-void cargaDeDatos(char mat[][butacas], int cf, int cc)
+void cargaDeDatos(char mat[][butacas])
 {
-  for (int k = 0; k < cc; k++)
+  for (int k = 0; k < butacas; k++)
     cout << nroButacasMuestra(k) << " ";
   cout << endl;
-  for (int i = 0; i < cf; i++)
+  for (int i = 0; i < filas; i++)
   {
-    for (int j = 0; j < cc; j++)
+    for (int j = 0; j < butacas; j++)
       cout << mat[i][j] << " ";
     cout << endl;
   }
 
   int fUsuario, bUsuario;
-  cout << "¿Que fila y numero de butaca quiere reservar?" << endl;
+  cout << "¿Que fila y numero de butaca quiere reservar?" << endl; // Poner que sea entre 9 y 12
   cout << "Fila: ";
   cin >> fUsuario;
   cout << "Butaca: ";
@@ -72,8 +79,72 @@ void cargaDeDatos(char mat[][butacas], int cf, int cc)
   if (fUsuario >= 0)
   {
     mat[fUsuario - 1][nroButacasReserva(bUsuario)] = 'R';
-    cargaDeDatos(mat, cf, cc);
+    cargaDeDatos(mat);
   }
+}
+
+void puntoA(char mat[][butacas])
+{
+  int cantDisp = 0, cantR = 0;
+
+  for (int i = 0; i < filas; i++)
+    for (int j = 0; j < butacas; j++)
+      if (mat[i][j] == 'D')
+        cantDisp++;
+      else if (mat[i][j] == 'R')
+        cantR++;
+
+  cout << "La cantidad de asientos disponibles es: " << cantDisp << endl;
+  cout << "La cantidad de asientos reservados es: " << cantR << endl;
+}
+
+void puntoB(char mat[][butacas])
+{
+  cout << "Los numeros de filas que quedaron vacias son:" << endl;
+  for (int i = 0; i < filas; i++)
+  {
+    int j;
+    for (j = 0; j < butacas; j++)
+      if (mat[i][j] == 'R')
+        j = butacas;
+    if (j == butacas)
+      cout << i + 1 << endl;
+  }
+}
+
+void puntoC(char mat[][butacas])
+{
+  int mayor, cantEspec, especXFila = 0, vPosMayor[filas];
+
+  inicializarV(vPosMayor);
+
+  cout << "La o las filas con mayor cantidad de espectadores son: " << endl;
+
+  for (int i = 0; i < filas; i++)
+  {
+    cantEspec = 0;
+    for (int j = 0; j < butacas; j++)
+      if (mat[i][j] == 'R')
+        cantEspec++;
+
+    if (cantEspec > especXFila)
+    {
+      especXFila = cantEspec;
+      vPosMayor[i] = especXFila;
+    }
+    else if (cantEspec != 0 && cantEspec == especXFila)
+      vPosMayor[i] = especXFila;
+  }
+
+  for (int k = 0; k < filas; k++)
+    if (vPosMayor[k] != 0 && vPosMayor[k] == especXFila)
+      cout << k + 1 << endl;
+}
+
+void inicializarV(int v[])
+{
+  for (int i = 0; i < filas; i++)
+    v[i] = 0;
 }
 
 int nroButacasMuestra(int n)
